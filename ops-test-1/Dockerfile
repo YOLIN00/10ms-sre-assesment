@@ -1,11 +1,14 @@
-FROM python:3.11-slim
+FROM python:3.11-alpine
 
 WORKDIR /src
 
-COPY app .
-RUN pip install -r requirements.txt
+COPY app/requirements.txt .
 
-EXPOSE 80
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app .
+
+EXPOSE 8080
 
 CMD ["python", "main.py"]
 
