@@ -197,6 +197,9 @@ Tasks:
 * Fix module output references
 * Validate the module structure
 
+Put your answers in this folder:
+`iac/solution/`
+
 ---
 
 # ⭐ Bonus (10 points)
