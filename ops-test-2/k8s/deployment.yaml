@@ -15,20 +15,23 @@ spec:
       containers:
       - name: advanced-app
         image: advanced-candidate:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         readinessProbe:
           httpGet:
             path: /healthz
-            port: 80
-          initialDelaySeconds: 1
-          periodSeconds: 3
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
-            cpu: "50m"
-            memory: "50Mi"
-      - name: sidecar
-        image: advanced-sidecar:latest
-        ports:
-        - containerPort: 9000
+            cpu: "250m"
+            memory: "256Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+      # - name: sidecar
+      #   image: advanced-sidecar:latest
+      #   ports:
+      #   - containerPort: 9000

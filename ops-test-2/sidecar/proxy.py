@@ -6,9 +6,9 @@ app = Flask(__name__)
 
 @app.route("/proxy")
 def proxy():
-    if random.random() < 0.2:
-        time.sleep(3)
-        return "", 504
+    # if random.random() < 0.2:
+    #     time.sleep(3)
+    #     return "", 504
     return "OK"
 
 if __name__ == "__main__":

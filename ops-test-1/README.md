@@ -176,9 +176,9 @@ Include your reasoning.
 2. Include this in the README of your repo:
 
 ```
-Name:
-Email:
-Time taken:
+Name: NURUN ISLAM NILOY
+Email: nurunislam.niloy@gmail.com
+Time taken: 3.5 hrs
 Any assumptions:
 ```
 

@@ -225,11 +225,12 @@ Document your improvement.
 2. Include the following in your README:
 
 ```
-Name:
-Email:
-Time taken:
-Environment used (kind/minikube):
-Any assumptions:
+Name: NURUN ISLAM NILOY
+Email: nurunislam.niloy@gmail.com
+Time taken: 6.5hrs
+Environment used (kind/minikube): KIND
+Any assumptions: I'm confused about the sidecar proxy. Docker Compose is not using the components in the `sidecar` folder. If the sidecar container stays in the same pod as the main application, then the network policy will not work. I haven't touched this part.
+
 ```
 
 3. Send us the link.

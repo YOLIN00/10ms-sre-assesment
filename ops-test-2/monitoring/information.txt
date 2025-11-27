@@ -1,0 +1,76 @@
+# Apply the configuration
+kubectl apply -f promtail-k8s.yaml
+
+# Check if Promtail pods are running
+kubectl get pods -n logging
+
+# Check logs
+kubectl logs -n logging -l app=promtail
+
+# Check DaemonSet status
+kubectl get daemonset -n logging
+
+
+What this includes:
+
+Namespace: logging namespace for organization
+ConfigMap: Promtail configuration that:
+
+Scrapes all pod logs in the cluster
+Adds labels: namespace, pod, container, node
+Sends logs to Loki
+
+
+RBAC: ServiceAccount, ClusterRole, ClusterRoleBinding for permissions
+DaemonSet: Runs Promtail on every node to collect logs
+Service: Exposes metrics endpoint
+
+Important notes:
+
+Loki URL: Currently set to http://loki.logging.svc.cluster.local:3100 (assuming Loki is in the same cluster)
+If Loki is external (like on your EC2): Update the clients.url in the ConfigMap to: http://<your-ec2-ip>:3100/loki/api/v1/push
+Promtail runs as a DaemonSet (one pod per node) to collect logs from all pods
+
+To update Loki URL:
+bash# Edit the ConfigMap
+kubectl edit configmap promtail-config -n logging
+
+# Restart Promtail pods
+kubectl rollout restart daemonset promtail -n logging
+
+==========
+k8s metrics server should be enabled before this.
+
+Deploy:
+bash# Deploy Prometheus
+kubectl apply -f prometheus-k8s.yaml
+
+# Check status
+kubectl get pods -n monitoring
+kubectl get svc -n monitoring
+
+# View logs
+kubectl logs -n monitoring -l app=prometheus
+Access Prometheus:
+
+From outside cluster: http://<any-node-ip>:30090
+From within cluster: http://prometheus-internal.monitoring.svc.cluster.local:9090
+
+Add Prometheus to your Grafana on EC2:
+
+Login to Grafana on EC2
+Go to Configuration → Data Sources → Add data source
+Select Prometheus
+Enter URL: http://<k8s-node-ip>:30090
+Click Save & Test
+
+Useful PromQL queries for pod metrics:
+CPU Usage by Pod:
+promqlsum(rate(container_cpu_usage_seconds_total{pod!="", namespace!=""}[5m])) by (pod, namespace) * 100
+Memory Usage by Pod (in MB):
+promqlsum(container_memory_working_set_bytes{pod!="", namespace!=""}) by (pod, namespace) / 1024 / 1024
+Pod Count by Namespace:
+promqlcount(kube_pod_info) by (namespace)
+Top 10 CPU consuming pods:
+promqltopk(10, sum(rate(container_cpu_usage_seconds_total{pod!=""}[5m])) by (pod, namespace))
+Now your Grafana on EC2 can visualize all K8s metrics! 🚀
